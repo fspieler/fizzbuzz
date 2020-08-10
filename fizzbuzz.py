@@ -9,11 +9,11 @@ def fizzbuzz(ul=20, **kwargs):
             f(
                 f,
                 i,
-                f'{items[idx][0]}{s}' if i % int(items[idx][1]) == 0 else s,
-                idx-1
-            ) if 0 <= idx else s if s else i
+                s+[items[idx][0]] if i % int(items[idx][1]) == 0 else s,
+                idx+1
+            ) if idx < len(items) else ''.join(s) if s else i
     )
-    return (fn(i, '', len(items)-1) for i in range(1,ul+1))
+    return (fn(i, [], 0) for i in range(1,ul+1))
 
 if __name__ == '__main__':
     from sys import argv
