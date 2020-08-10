@@ -1,22 +1,25 @@
+#!/usr/bin/env python3
 def fizzbuzz(ul=20, **kwargs):
     if not kwargs:
-        kwargs = {
-            'fizz': 3,
-            'buzz': 5
-        }
-    items = sorted(kwargs.items(), key=lambda t:t[1])
-    def fn(i, s, idx):
-        if idx == -1:
-            return s if s else i
-        return fn(
-            i,
-            f'{items[idx][0]}{s}' if i % items[idx][1] == 0 else s,
-            idx-1
-        )
-
+        items = [('fizz', '3'), ('buzz', '5')]
+    else:
+        items = list(kwargs.items())
+    fn = (lambda f: lambda i, s, idx: f(f, i, s, idx))(
+        lambda f, i, s, idx:
+            f(
+                f,
+                i,
+                f'{items[idx][0]}{s}' if i % int(items[idx][1]) == 0 else s,
+                idx-1
+            ) if 0 <= idx else s if s else i
+    )
     return (fn(i, '', len(items)-1) for i in range(1,ul+1))
 
-for val in fizzbuzz(41, fizz=3, buzz=4):
-    print(val)
-
+if __name__ == '__main__':
+    from sys import argv
+    for val in fizzbuzz(
+        int(argv[1]) if len(argv) > 1 else 10,
+        **dict([a.split('=') for a in argv[2:]])
+    ):
+        print(val)
 
